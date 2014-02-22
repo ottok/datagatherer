@@ -2,11 +2,29 @@ import QtQuick 2.0
 import Sailfish.Silica 1.0
 import Sailfish.Silica 1.0
 
-
 // Just a simple example to demo both property binding and doing something via pulley menu action
 // to provide a sample of Sailfish-specific UI testing
 Page {
+
     id: page
+
+    function getData() {
+
+        console.log("Refreshing data")
+
+        var remoteData = new XMLHttpRequest()
+        remoteData.onreadystatechange = function() {
+            if (remoteData.readyState == XMLHttpRequest.DONE) {
+                var responseText = remoteData.responseText
+                var responseTextMatch = /<div id="rss-2"(.*?)<\/div>/.exec(responseText)
+                mainLabel.rawText = responseTextMatch[0]
+            }
+        }
+
+        remoteData.open("GET", "https://seravo.fi/blog")
+        remoteData.send();
+
+    }
 
     // Exposing properties for testing. In real app you might like to hide it behind a single interface
     // e.g. via "property variant internals" and then put a QtObject with the individual properties to it
@@ -23,21 +41,7 @@ Page {
             MenuItem {
                 id: subtractMenuAction
                 text: "Refresh"
-                onClicked: {
-                    console.log("Refreshing data")
-
-                    var remoteData = new XMLHttpRequest();
-                    remoteData.onreadystatechange = function() {
-                        if (remoteData.readyState == XMLHttpRequest.HEADERS_RECEIVED) {
-                            mainLabel.text = remoteData.getAllResponseHeaders();
-                        }
-                    }
-
-                    remoteData.open("GET", "http://seravo.fi/");
-                    remoteData.send();
-
-                }
-
+                onClicked: getData()
             }
         }
         
@@ -59,12 +63,27 @@ Page {
                 anchors.leftMargin: Theme.paddingLarge
                 anchors.rightMargin: Theme.paddingLarge
 
-                horizontalAlignment: Text.AlignHCenter
+                horizontalAlignment: Text.AlignHLeft
                 wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                 textFormat: Text.RichText
-                text: "any text here"
+                text: myStyle + rawText
+                property string myStyle: "
+<style>
+a { color: " + Theme.highlightColor + "; }
+</style>
+"
+                property string rawText
+
+                onLinkActivated: {
+                    Qt.openUrlExternally(link)
+                }
+
             }
         }
+    }
+
+    Component.onCompleted: {
+        getData()
     }
 
 }
