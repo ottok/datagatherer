@@ -1,0 +1,6 @@
+[Desktop Entry]
+Type=Application
+X-Nemo-Application-Type=silica-qt5
+Name=Helloworld Pro
+Icon=harbour-datagatherer
+Exec=harbour-datagatherer
