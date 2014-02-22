@@ -22,10 +22,20 @@ Page {
             id: pullDownMenu
             MenuItem {
                 id: subtractMenuAction
-                text: "Subtract!"
+                text: "Refresh"
                 onClicked: {
-                    console.log("subtractMenuAction clicked")
-                    subtrLabel.text = "A-B = " + (parseInt(a.text) - parseInt(b.text))
+                    console.log("Refreshing data")
+
+                    var remoteData = new XMLHttpRequest();
+                    remoteData.onreadystatechange = function() {
+                        if (remoteData.readyState == XMLHttpRequest.HEADERS_RECEIVED) {
+                            mainLabel.text = remoteData.getAllResponseHeaders();
+                        }
+                    }
+
+                    remoteData.open("GET", "http://seravo.fi/");
+                    remoteData.send();
+
                 }
 
             }
@@ -44,6 +54,7 @@ Page {
                 title: "Datagatherer"
             }
             Label {
+                id: mainLabel
                 width: parent.width
                 anchors.leftMargin: Theme.paddingLarge
                 anchors.rightMargin: Theme.paddingLarge

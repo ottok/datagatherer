@@ -12,11 +12,11 @@ Name:       harbour-datagatherer
 %{!?qtc_qmake5:%define qtc_qmake5 %qmake5}
 %{!?qtc_make:%define qtc_make make}
 %{?qtc_builddir:%define _builddir %qtc_builddir}
-Summary:    Helloworld Pro for Sailfish
-Version:    0.5
+Summary:    Datagatherer
+Version:    0.1
 Release:    5
 Group:      Qt/Qt
-License:    Public domain except for the icon
+License:    MIT
 Source0:    %{name}-%{version}.tar.bz2
 Source100:  harbour-datagatherer.yaml
 Requires:   libsailfishapp
@@ -27,7 +27,7 @@ BuildRequires:  pkgconfig(sailfishapp)
 BuildRequires:  desktop-file-utils
 
 %description
-Missing Helloworld for Sailfish OS. Use this project for a good app start
+Datagatherer test app
 
 %package test
 Summary:    Tests for the Helloworld Pro for Sailfish
